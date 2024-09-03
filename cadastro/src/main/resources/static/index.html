@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Cadastro de Usuarios</title>
+</head>
+<body>
+	<h1>Cadastro de Usuarios </h1>
+	<form id= "userForm">
+		<label for= "name"> Nome:</label>
+		<input type="text" id="name" name="name" required> <br><br>
+		<label for= "email"> email:</label>
+		<input type="text" id="email" name="email" required> <br><br>
+		<button type="submit">Cadastrar</button>
+	 </form>
+	 <ul id="user-List"></ul>
+
+	<script>
+	document.getElementById('userForm').addEventListener('submit', function(event){
+		event.preventDefault();
+
+		const email = document.getElementById('email').value;
+		
+		({nome: event.target.name.value, email: email})
+		fetch('/users/add', {
+			method: 'POST',
+			headers:{
+				'Content-Type':'application/json'
+			},
+			body:JSON.stringify({nome: event.target.name.value, email: email})
+		})
+		.then(response => response.json())
+		.then(user=>{
+			const userList = document.getElementById("user-List");
+			const listItem = document.createElement('li');
+			listItem.textContent = `Nome: ${user.nome}, Email: ${user.email}`
+			userList.appendChild(listItem)
+		})
+	});
+	
+
+	
+	</script>
+</body>
+</html>
